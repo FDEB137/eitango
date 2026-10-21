@@ -1,0 +1,325 @@
+/* 見た目（docs/shiyou.md 12章）。色と文字の大きさは変数で持ち、暗い画面でも読める配色にする。 */
+:root {
+  --bg: #FAF8F3;
+  --fg: #222222;
+  --sub: #5c5c5c;
+  --line: #d9d4c7;
+  --card: #ffffff;
+  --primary: #2F4B7C;
+  --on-primary: #ffffff;
+  --ok: #2E7D5B;
+  --ng: #C0483E;
+  --ai: #6B5B95;
+  --check: #B7791F;
+
+  --font-base: 17px;
+  --font-small: 14px;
+  --font-title: 1.5rem;
+  --font-word: 2rem;
+  --btn-height: 56px;
+  --tap-min: 48px;
+  --max-width: 480px;
+  --font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181d;
+    --fg: #ece9e1;
+    --sub: #a9a79f;
+    --line: #353a45;
+    --card: #20232b;
+    --primary: #6f8fd0;
+    --on-primary: #101319;
+    --ok: #4fb386;
+    --ng: #e0746a;
+    --ai: #a99bd6;
+    --check: #e0a84a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html {
+  font-size: var(--font-base);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-family);
+  line-height: 1.6;
+}
+
+.app {
+  max-width: var(--max-width);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 下に固定するもの（帯 .bar・その上の段 .bar-sub・ナビ .nav）の高さ。
+   どれが出ているかは枠（.app）の class（has-nav・has-bar・has-sub。ui/shell.js がつける）で決め、
+   本文（.main）の下に同じだけ余白をとって、固定したものの下に本文が隠れないようにする。 */
+.app {
+  --safe: env(safe-area-inset-bottom);
+  --nav-h: calc(var(--tap-min) + 1px + var(--safe)); /* 文字 48px + 上の線 + 下の安全な余白 */
+  --bar-h: calc(var(--btn-height) + 17px);           /* ボタン 56px + 上下 8px + 上の線 */
+  --sub-h: calc(var(--tap-min) + 9px);               /* ボタン 48px + 上 8px + 上の線 */
+  --d-nav: 0px;
+  --d-bar: 0px;
+  --d-sub: 0px;
+}
+.app.has-nav { --d-nav: var(--nav-h); }
+.app.has-bar { --d-bar: calc(var(--bar-h) + var(--safe)); }
+.app.has-bar.has-nav { --d-bar: var(--bar-h); }
+.app.has-sub { --d-sub: var(--sub-h); }
+
+.main {
+  flex: 1;
+  padding: 16px 16px calc(16px + var(--d-nav) + var(--d-bar) + var(--d-sub));
+}
+
+.title { font-size: var(--font-title); margin: 0 0 12px; }
+.lead { margin: 0 0 12px; }
+.note { margin: 0; color: var(--sub); font-size: var(--font-small); }
+
+/* 下に固定したボタンの帯（ナビが出ているときはナビの上に。幅は .app と同じ最大 480px で中央） */
+.bar, .bar-sub, .nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.bar {
+  bottom: var(--d-nav);
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px calc(8px + var(--safe));
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.app.has-nav .bar { padding-bottom: 8px; }
+.bar:empty { display: none; }
+
+/* 帯の上の段（「ひとつ戻る」）。押せる大きさ 48px */
+.bar-sub {
+  bottom: calc(var(--d-nav) + var(--d-bar));
+  display: flex;
+  padding: 8px 16px 0;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.bar-sub:empty { display: none; }
+
+[hidden] { display: none !important; }
+
+.btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  min-height: var(--btn-height);
+  min-width: var(--tap-min);
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--primary);
+  font: inherit;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-main { background: var(--primary); color: var(--on-primary); }
+.btn-ok { border-color: var(--ok); background: var(--ok); color: #ffffff; }
+.btn-ng { border-color: var(--ng); background: var(--ng); color: #ffffff; }
+.btn:disabled { opacity: 0.5; }
+/* 処理中（仕様 7.7。版5）: ほかのボタンとナビは押した瞬間から押せない（disabled・aria-disabled）。
+   見た目は処理が少し（目安0.3秒）続いてから（.is-busy-shown）薄くする。押したボタンはすぐ薄い。 */
+.btn[data-locked]:disabled { opacity: 1; }
+.is-busy-shown [data-locked]:not(.file-input), .is-busy-shown .file-btn { opacity: 0.5; }
+.is-busy a[aria-disabled="true"], .is-busy .file-input { cursor: default; }
+
+.btn:focus-visible, .nav-item:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ナビ */
+.nav {
+  bottom: 0;
+  display: flex;
+  height: var(--nav-h);
+  border-top: 1px solid var(--line);
+  padding-bottom: var(--safe);
+  background: var(--card);
+}
+
+.nav-item {
+  flex: 1;
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sub);
+  text-decoration: none;
+}
+
+.nav-current { color: var(--primary); font-weight: bold; }
+
+/* 印の札（枠線の小さな札） */
+.badge {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: var(--font-small);
+}
+.badge-ai { color: var(--ai); }
+.badge-check { color: var(--check); }
+/* 単語帳の印: 「使う」は主色の塗り・白文字、「学習中」は主色の枠線・主色の文字（AI・要確認と見分ける） */
+.badge-active { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+.badge-learning { border-color: var(--primary); color: var(--primary); }
+
+/* ---- 画面の部品（フェーズ3） ---- */
+.btn-block { display: flex; width: 100%; flex: none; margin-top: 8px; }
+.btn-sub { border-color: var(--line); color: var(--sub); font-weight: normal; }
+/* 帯の上の段の「ひとつ戻る」は押せる大きさ 48px（.btn の 56px より後に書いて効かせる） */
+.btn.btn-undo { min-height: var(--tap-min); }
+.btn-pause, .btn-restart { flex: none; min-height: var(--tap-min); font-size: var(--font-small); }
+
+.top-row { display: flex; gap: 8px; justify-content: space-between; margin-bottom: 8px; }
+
+.title-btn {
+  display: inline-block;
+  max-width: 100%;
+  min-height: var(--tap-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-weight: bold;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.progress { margin: 0 0 8px; color: var(--sub); }
+.line { margin: 4px 0; overflow-wrap: anywhere; }
+.card {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.section-title { margin: 0 0 6px; font-size: 1.1rem; }
+.word-list { display: block; }
+
+/* 単語カード */
+.word-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.word-no { color: var(--sub); font-size: var(--font-small); }
+.word-en { font-size: 1.3rem; font-weight: bold; overflow-wrap: anywhere; white-space: pre-line; }
+.word-en-big { font-size: var(--font-word); }
+.word-front { padding: 28px 14px; text-align: center; }
+.word-front .word-head { justify-content: center; }
+.word-pos { color: var(--sub); white-space: pre-line; }
+.row { display: flex; gap: 8px; margin: 4px 0; align-items: baseline; flex-wrap: wrap; }
+.label { flex: none; min-width: 5em; color: var(--sub); font-size: var(--font-small); }
+.value { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-line; }
+.book-text, .ai-text, .check-text, .nigate-meaning, .nigate-new-words, .word-changed-list .list-item { white-space: pre-line; }
+.ai-part { margin-left: 6px; }
+.ai-part .badge { margin-right: 4px; }
+.row-check .badge { flex: none; }
+.row-check .value { color: var(--check); }
+
+/* 知らせ */
+.alert {
+  display: block;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left-width: 6px;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+}
+.alert-line { margin: 0; }
+.alert-line + .alert-line { margin-top: 4px; }
+.alert-info { border-left-color: var(--primary); }
+.alert-warn { border-left-color: var(--check); }
+.alert-error { border-left-color: var(--ng); }
+.alert-btn { min-height: var(--tap-min); cursor: pointer; text-decoration: underline; }
+.alert .btn-block { margin-top: 10px; }
+
+.error-list, .warning-list, .summary-list { margin: 8px 0 0; padding-left: 1.2em; }
+
+/* 結果 */
+.result-counts { font-size: 1.4rem; font-weight: bold; margin: 0 0 8px; }
+.count-ok { color: var(--ok); }
+.count-ng { color: var(--ng); }
+
+/* 単語帳 */
+.book-name { font-size: 1.15rem; font-weight: bold; overflow-wrap: anywhere; }
+.nigate-item .word-head { margin-bottom: 2px; }
+
+/* 入力・ファイルを選ぶ */
+.field { display: block; margin: 0 0 12px; }
+.field .label { display: block; margin-bottom: 4px; }
+.text-input {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 8px 10px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--fg);
+  font: inherit;
+}
+.file-btn { position: relative; overflow: hidden; }
+.file-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.file-btn:focus-within { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+/* ---- 説明ページ（help/*.html。フェーズ5） ---- */
+.doc h1 { font-size: var(--font-title); margin: 0 0 12px; }
+.doc h2 { font-size: 1.2rem; margin: 28px 0 8px; padding-top: 4px; border-top: 1px solid var(--line); }
+.doc h3 { font-size: 1.05rem; margin: 18px 0 6px; }
+.doc p { margin: 0 0 12px; }
+.doc ul, .doc ol { margin: 0 0 12px; padding-left: 1.4em; }
+.doc li { margin: 0 0 4px; }
+.doc a { color: var(--primary); }
+.doc .btn { display: flex; width: 100%; flex: none; margin: 8px 0 12px; }
+.doc-nav { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0 0 12px; }
+.doc-nav a { display: inline-flex; align-items: center; min-height: var(--tap-min); }
+.toc { margin: 0 0 12px; padding: 10px 14px 10px 2em; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.toc li { margin: 0; }
+.toc a { display: inline-block; min-height: 32px; }
+.table-wrap { margin: 0 0 12px; overflow-x: auto; }
+.doc table { border-collapse: collapse; min-width: 100%; font-size: var(--font-small); }
+.doc th, .doc td { padding: 6px 8px; border: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.doc th { background: var(--card); white-space: nowrap; }
+.doc pre { margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); overflow-x: auto; font-size: var(--font-small); line-height: 1.5; }
+.doc code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; }
+.doc .warn { padding: 10px 14px; border: 1px solid var(--line); border-left: 6px solid var(--check); border-radius: 8px; background: var(--card); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

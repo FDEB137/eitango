@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F4B7C">
+<title>CSV の作り方 - えいたんご</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="app">
+<main class="main doc">
+<p class="doc-nav"><a href="../index.html">アプリに戻る</a><a href="./tsukaikata.html">使い方へ</a></p>
+<h1>CSV の作り方</h1>
+
+<ol class="toc">
+<li><a href="#towa">CSV とは</a></li>
+<li><a href="#retsu">列の表</a></li>
+<li><a href="#kakikata">書き方</a></li>
+<li><a href="#rei">例</a></li>
+<li><a href="#sakusei">表計算ソフトでの作り方と保存</a></li>
+<li><a href="#idou">スマホへの移し方</a></li>
+<li><a href="#error">取り込みのエラーと直し方</a></li>
+<li><a href="#hinagata">ひな形のダウンロード</a></li>
+</ol>
+
+<h2 id="towa">1. CSV とは</h2>
+<p>CSV は、表を文字だけで書いたファイルです。1行に1つの単語を書き、項目をカンマ（<code>,</code>）で区切ります。Excel や Google スプレッドシートで表を作って保存すれば、作れます。</p>
+<p>このページの流れは次のとおりです。</p>
+<ol>
+<li>列の決まりを知る（2章）</li>
+<li>書き方の決まりを知る（3章）</li>
+<li>例を見る（4章）</li>
+<li>表計算ソフトで作って保存する（5章）</li>
+<li>スマホに移して、アプリで取り込む（6章）</li>
+<li>エラーが出たら直す（7章）</li>
+</ol>
+<p>ひな形が欲しいときは、8章からダウンロードできます。</p>
+
+<h2 id="retsu">2. 列の表</h2>
+<p>1行目に、次の列名を書きます。「必須」の列は、必ず用意して、中身も入れます。列の順番は自由です。列名の全角・半角や空白は、多少違っていても読み取れます（たとえば「類語（AI）」と「類語(AI)」は同じ列です）。</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>列名</th><th>必須</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>番号</td><td>必須</td><td>単語帳の番号。1以上の整数。同じ番号を2回使えません</td></tr>
+<tr><td>英単語</td><td>必須</td><td>見出しの英単語・熟語</td></tr>
+<tr><td>品詞</td><td></td><td>品詞の略号（例 <code>名</code>・<code>動</code>・<code>形</code>。複数なら <code>動・名</code>）</td></tr>
+<tr><td>意味</td><td>必須</td><td>日本語の意味</td></tr>
+<tr><td>類語</td><td></td><td>本や自分の資料に載っている類語</td></tr>
+<tr><td>対義語</td><td></td><td>本や自分の資料に載っている対義語</td></tr>
+<tr><td>同じ語源の単語</td><td></td><td>本や自分の資料に載っている、同じ語源の単語・派生語</td></tr>
+<tr><td>類語（AI）</td><td></td><td>資料に無い類語を、AI などで補ったもの</td></tr>
+<tr><td>対義語（AI）</td><td></td><td>資料に無い対義語を、AI などで補ったもの</td></tr>
+<tr><td>同じ語源の単語（AI）</td><td></td><td>資料に無い同じ語源の単語を、AI などで補ったもの</td></tr>
+<tr><td>要確認</td><td></td><td>内容に不確かな点があるときのメモ。空なら問題なしです</td></tr>
+</tbody>
+</table>
+</div>
+<p>必須の列は、番号・英単語・意味の3つだけです。ほかの列は、無くても取り込めます。</p>
+
+<h2 id="kakikata">3. 書き方</h2>
+<ul>
+<li>1行に1つの単語を書きます。1行目は列名の行、2行目から単語です。</li>
+<li>項目の区切りはカンマ（<code>,</code>）です。表計算ソフトで保存すれば、自動でそうなります。</li>
+<li>番号の順に並んでいなくてもかまいません（アプリが番号の順に並べます）。番号が飛んでいてもかまいません（警告が出ます）。1から始まらなくてもかまいません。</li>
+<li>番号は、半角の数字だけで書きます。全角の数字（１２）や小数（1.5）、+1 のような書き方はエラーになります。</li>
+<li>何も書いていない行や、すべてのセルが空の行は、飛ばされます。</li>
+<li>セルの中で改行したものは、アプリの表示でも改行になります。</li>
+</ul>
+<h3>複数書くとき</h3>
+<p>類語・対義語・同じ語源の単語（と、（AI）の列）に複数書くときは、<code> / </code>（半角スペース・スラッシュ・半角スペース）で区切ります。意味を添えるときは、英語の後ろに全角のかっこで書きます。</p>
+<pre><code>instance（例） / sample（見本）</code></pre>
+<h3>品詞ごとに意味が違うとき</h3>
+<p>意味の列で、各品詞の前に <code>〔品詞〕</code> を付け、全角のスラッシュ <code>／</code> で区切ります。</p>
+<pre><code>〔動〕を記録する／〔名〕記録</code></pre>
+<p>この例では、品詞の列は <code>動・名</code> です。</p>
+<h3>（AI）の列の意味</h3>
+<ul>
+<li>本や自分の資料に載っている内容は、（AI）の付かない列に入れます。</li>
+<li>資料に無い内容を、AI などで補ったときは、（AI）の列に入れます。アプリは、（AI）の列の内容に「AI」の印を付けて表示します。</li>
+<li><strong>同じものを両方の列に入れません。</strong>たとえば、資料に類語が1つ載っていて、AI が2つ足したときは、資料の1つは「類語」に、足した2つは「類語（AI）」に入れます。</li>
+<li>意味と品詞は、補いません。資料に無いときは空にします。意味は必須なので、意味の無い語は CSV に入れません。</li>
+</ul>
+<h3>要確認の列</h3>
+<p>内容に不確かな点があるとき、何が不確かかをメモします。メモがある語には、アプリの画面で「要確認」の印とメモが出ます。問題が無ければ空にします。</p>
+
+<h2 id="rei">4. 例</h2>
+<p>説明のために作った例です。</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>番号</th><th>英単語</th><th>品詞</th><th>意味</th><th>類語</th><th>対義語</th><th>同じ語源の単語</th><th>類語（AI）</th><th>対義語（AI）</th><th>同じ語源の単語（AI）</th><th>要確認</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>record</td><td>動・名</td><td>〔動〕を記録する／〔名〕記録</td><td></td><td></td><td></td><td>register（を登録する）</td><td></td><td>recorder（記録係）</td><td></td></tr>
+<tr><td>2</td><td>brave</td><td>形</td><td>勇敢な</td><td></td><td>cowardly（臆病な）</td><td></td><td>courageous（勇気のある）</td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td>example</td><td>名</td><td>例</td><td></td><td></td><td></td><td>instance（例） / sample（見本）</td><td></td><td>exemplify（を例示する）</td><td>意味の2つ目が不確か</td></tr>
+</tbody>
+</table>
+</div>
+<p>これを CSV の文字で書くと、次のようになります。</p>
+<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認
+1,record,動・名,〔動〕を記録する／〔名〕記録,,,,register（を登録する）,,recorder（記録係）,
+2,brave,形,勇敢な,,cowardly（臆病な）,,courageous（勇気のある）,,,
+3,example,名,例,,,,instance（例） / sample（見本）,,exemplify（を例示する）,意味の2つ目が不確か</code></pre>
+<p>カンマ・ダブルクォート（<code>"</code>）・改行を含むセルは、<code>"</code> で囲み、中の <code>"</code> は <code>""</code> と2つ重ねます。表計算ソフトで保存すれば、自動でそうなります。</p>
+
+<h2 id="sakusei">5. 表計算ソフトでの作り方と保存</h2>
+<ol>
+<li>表計算ソフトで新しい表を作り、1行目に2章の列名を書きます。</li>
+<li>2行目から、1行に1つの単語を書きます。</li>
+<li>CSV として保存します（下）。</li>
+</ol>
+<h3>Excel</h3>
+<p>「名前を付けて保存」で、ファイルの種類に「CSV UTF-8 (コンマ区切り)」を選びます。</p>
+<h3>Google スプレッドシート</h3>
+<p>「ファイル」→「ダウンロード」→「カンマ区切り形式 (.csv)」を選びます。</p>
+<p>メニューの表示は、版によって違うことがあります。違うときは、近い名前の項目を探してください。</p>
+<p>文字コードは UTF-8 で保存してください。UTF-8 でないとき、アプリは Shift_JIS として読み、警告を出します（7章）。</p>
+
+<h2 id="idou">6. スマホへの移し方</h2>
+<p>パソコンで作った CSV を、スマホに移します。</p>
+<ul>
+<li>自分宛てのメールに添付して送り、スマホで受け取って保存する。</li>
+<li>クラウドのストレージ（自分が使っているもの）に置き、スマホからそのファイルを開いて保存する。</li>
+</ul>
+<p>端末ごとの細かい操作は、お使いの端末の案内を見てください。</p>
+<p>移せたら、アプリで「単語帳」の画面の「単語帳を取り込む」（単語帳が1つも無いときは、ホームにも出ます）→「CSV ファイルを選ぶ」を押して、そのファイルを選びます。</p>
+
+<h2 id="error">7. 取り込みのエラーと直し方</h2>
+<p>取り込むとき、アプリが CSV を点検します。エラーがあると取り込めません。行番号と理由が出るので、CSV を直して、もう一度取り込みます。行番号は、ファイルの1行目から数えた番号です（セルの中で改行しているときは、その行が始まる行の番号です）。</p>
+<h3>エラー（取り込めない）</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>エラー</th><th>直し方</th></tr></thead>
+<tbody>
+<tr><td>必須の列（番号・英単語・意味）が無い</td><td>1行目に、その列名を書きます。列名の書き間違いも確かめます</td></tr>
+<tr><td>同じ列名が2つある</td><td>どちらか1つを消します</td></tr>
+<tr><td>データの行が無い</td><td>2行目から単語を書きます（列名の行だけのファイルや、空のファイルは取り込めません）</td></tr>
+<tr><td>列の数が列名の行と違う行がある</td><td>その行のカンマの数を、列名の行とそろえます</td></tr>
+<tr><td><code>"</code> が閉じていない</td><td>セルを囲む <code>"</code> の対を確かめます</td></tr>
+<tr><td>番号が空・1以上の整数でない</td><td>半角の数字だけの、1以上の整数にします（全角の数字・小数・+1 のような書き方は不可です）</td></tr>
+<tr><td>番号が重なっている</td><td>同じ番号を使っている行の、どちらかを直します</td></tr>
+<tr><td>英単語・意味が空</td><td>その行に英単語・意味を書きます。意味が無い語は、行ごと消します</td></tr>
+<tr><td>ファイルが大きすぎる（5MB を超える）・語が多すぎる（10000語を超える）</td><td>ファイルを分けるなどして、小さくします</td></tr>
+</tbody>
+</table>
+</div>
+<h3>警告（表示されて、そのまま取り込める）</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>警告</th><th>意味と直し方</th></tr></thead>
+<tbody>
+<tr><td>知らない列がある</td><td>列名が2章のものと違います。その列は無視されます。書き間違いなら直します</td></tr>
+<tr><td>番号が飛んでいる</td><td>「番号が飛んでいます: 4、6〜7」のように出ます。意図したものなら、そのままでかまいません（最小の番号より前は見ません。たとえば41から始まっていても警告は出ません）</td></tr>
+<tr><td>Shift_JIS として読んだ</td><td>UTF-8 として読めなかったので Shift_JIS として読みました。文字が正しく出ていればそのままでもかまいませんが、表計算ソフトでは「CSV UTF-8」で保存すると確実です（5章）</td></tr>
+<tr><td>要確認のメモがある語がある</td><td>要確認の列にメモがある語の数が出ます。確かめたいだけの知らせです</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="hinagata">8. ひな形のダウンロード</h2>
+<p>列名の行と、4章の例の3行が入った CSV です。例の行を消して、自分の単語を書いてください。</p>
+<button id="dl-template" class="btn btn-main" type="button" hidden>ひな形 CSV をダウンロードする</button>
+<p>ボタンが出ない・使えないときは、表計算ソフトの1行目に、次の列名を書き写してください。</p>
+<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認</code></pre>
+
+<p class="doc-nav"><a href="../index.html">アプリに戻る</a><a href="./tsukaikata.html">使い方へ</a></p>
+</main>
+</div>
+<script type="module" src="./help.js"></script>
+</body>
+</html>

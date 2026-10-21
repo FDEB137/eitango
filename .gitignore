@@ -1,0 +1,29 @@
+# このフォルダは GitHub に公開するリポジトリ（GitHub Pages）。
+# 単語データ・写真・記録の書き出しファイルは公開しない。万一ここに置いても公開されないように除外する。
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.ods
+*.jpg
+*.jpeg
+*.heic
+*.heif
+*.webp
+*.gif
+*.bmp
+*.tif
+*.tiff
+*.png
+!icons/*.png
+eitango-kiroku-*.json
+wordbooks/
+photos/
+parts/
+kensa/
+
+# Windows・エディタの一時ファイル
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
