@@ -17,6 +17,7 @@
 *.png
 !icons/*.png
 eitango-kiroku-*.json
+eitango-ikoumae-*.json
 wordbooks/
 photos/
 parts/
