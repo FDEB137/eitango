@@ -245,6 +245,9 @@ body {
 .book-text, .ai-text, .check-text, .nigate-meaning, .nigate-new-words, .word-changed-list .list-item { white-space: pre-line; }
 .ai-part { margin-left: 6px; }
 .ai-part .badge { margin-right: 4px; }
+.cell-pre { white-space: pre-line; }
+.row-expr .value, .row-note .value { white-space: pre-line; overflow-wrap: anywhere; font-size: inherit; }
+.row-expr .book-text, .row-note .book-text { white-space: pre-line; overflow-wrap: anywhere; }
 .row-check .badge { flex: none; }
 .row-check .value { color: var(--check); }
 

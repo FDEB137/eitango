@@ -1,7 +1,7 @@
 // 説明ページ（csv.html）のひな形 CSV のダウンロードだけ。外部への通信はしない。
 // ひな形は Blob で作る（app/ に CSV ファイルは置かない）。中身は docs/csv.md の列と、作った例の3行だけ。
 
-// docs/csv.md 1章の11列（この順）
+// docs/csv.md 1章の13列（この順）
 export const TEMPLATE_HEADER = [
   "番号",
   "英単語",
@@ -10,6 +10,8 @@ export const TEMPLATE_HEADER = [
   "類語",
   "対義語",
   "同じ語源の単語",
+  "語句",
+  "備考",
   "類語（AI）",
   "対義語（AI）",
   "同じ語源の単語（AI）",
@@ -18,9 +20,23 @@ export const TEMPLATE_HEADER = [
 
 // docs/csv.md 2章の例（説明のために作った例。どの単語帳の内容でもない）
 export const TEMPLATE_ROWS = [
-  ["1", "record", "動・名", "〔動〕を記録する／〔名〕記録", "", "", "", "register（を登録する）", "", "recorder（記録係）", ""],
-  ["2", "brave", "形", "勇敢な", "", "cowardly（臆病な）", "", "courageous（勇気のある）", "", "", ""],
-  ["3", "example", "名", "例", "", "", "", "instance（例） / sample（見本）", "", "exemplify（を例示する）", "意味の2つ目が不確か"],
+  [
+    "1",
+    "record",
+    "動・名",
+    "〔動〕を記録する／〔名〕記録",
+    "",
+    "",
+    "",
+    "keep a record of X（X を記録しておく）",
+    "〔解説〕keep a record of X（X を記録しておく）の形でよく使う。名詞は前に強く読む。\n〔ひとこと〕会議では、たいてい誰かが記録を取っている。",
+    "register（を登録する）",
+    "",
+    "recorder（記録係）",
+    "",
+  ],
+  ["2", "brave", "形", "勇敢な", "", "cowardly（臆病な）", "", "", "", "courageous（勇気のある）", "", "", ""],
+  ["3", "example", "名", "例", "", "", "", "for example（たとえば）", "", "instance（例） / sample（見本）", "", "exemplify（を例示する）", "意味の2つ目が不確か"],
 ];
 
 export const TEMPLATE_FILE_NAME = "tangochou-hinagata.csv";
@@ -32,7 +48,7 @@ function cell(s) {
 // ひな形の文字列（先頭に BOM。改行は CRLF）。Excel で開いても文字化けしないように BOM をつける。
 export function templateText() {
   const lines = [TEMPLATE_HEADER, ...TEMPLATE_ROWS].map((row) => row.map(cell).join(","));
-  return "\uFEFF" + lines.join("\r\n") + "\r\n";
+  return "﻿" + lines.join("\r\n") + "\r\n";
 }
 
 // 共有シート（使えれば）かダウンロードで保存する（js/ui/io.js の saveFile と同じやり方）。

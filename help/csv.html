@@ -51,6 +51,8 @@
 <tr><td>類語</td><td></td><td>本や自分の資料に載っている類語</td></tr>
 <tr><td>対義語</td><td></td><td>本や自分の資料に載っている対義語</td></tr>
 <tr><td>同じ語源の単語</td><td></td><td>本や自分の資料に載っている、同じ語源の単語・派生語</td></tr>
+<tr><td>語句</td><td></td><td>本や自分の資料に載っている、見出し語を使った語句・熟語・よく使う形（<code>X</code> などの記号を含んでよい）</td></tr>
+<tr><td>備考</td><td></td><td>本や自分の資料に載っている、そのほかの説明の文（使い方の注意・コラムなど）。文のまま書きます</td></tr>
 <tr><td>類語（AI）</td><td></td><td>資料に無い類語を、AI などで補ったもの</td></tr>
 <tr><td>対義語（AI）</td><td></td><td>資料に無い対義語を、AI などで補ったもの</td></tr>
 <tr><td>同じ語源の単語（AI）</td><td></td><td>資料に無い同じ語源の単語を、AI などで補ったもの</td></tr>
@@ -58,7 +60,11 @@
 </tbody>
 </table>
 </div>
-<p>必須の列は、番号・英単語・意味の3つだけです。ほかの列は、無くても取り込めます。</p>
+<p>必須の列は、番号・英単語・意味の3つだけです。ほかの列は、無くても取り込めます（語句・備考の列が無い CSV も、そのまま取り込めます）。</p>
+<ul>
+<li>語句・備考には、（AI）の列がありません。資料に載っている内容だけを入れます。</li>
+<li>語句・備考は、「覚える」画面だけに出ます。テストの答えや結果の画面、苦手の一覧には出ません。</li>
+</ul>
 
 <h2 id="kakikata">3. 書き方</h2>
 <ul>
@@ -70,8 +76,12 @@
 <li>セルの中で改行したものは、アプリの表示でも改行になります。</li>
 </ul>
 <h3>複数書くとき</h3>
-<p>類語・対義語・同じ語源の単語（と、（AI）の列）に複数書くときは、<code> / </code>（半角スペース・スラッシュ・半角スペース）で区切ります。意味を添えるときは、英語の後ろに全角のかっこで書きます。</p>
+<p>類語・対義語・同じ語源の単語・語句（と、（AI）の列）に複数書くときは、<code> / </code>（半角スペース・スラッシュ・半角スペース）で区切ります。意味を添えるときは、英語の後ろに全角のかっこで書きます。</p>
 <pre><code>instance（例） / sample（見本）</code></pre>
+<h3>備考の書き方</h3>
+<p>備考は文で書きます。区切りの決まりはありません。説明が2つ以上あるときは、セルの中で改行して、1つずつ行を分けてかまいません（改行のあるセルは <code>"</code> で囲みます。表計算ソフトで保存すれば、自動でそうなります）。行の頭に <code>〔種類〕</code> を付けて、どんな説明かを示してもかまいません（種類の名前は自由です。アプリは種類を読み分けません）。</p>
+<pre><code>〔解説〕keep a record of X（X を記録しておく）の形でよく使う。
+〔ひとこと〕会議では、たいてい誰かが記録を取っている。</code></pre>
 <h3>品詞ごとに意味が違うとき</h3>
 <p>意味の列で、各品詞の前に <code>〔品詞〕</code> を付け、全角のスラッシュ <code>／</code> で区切ります。</p>
 <pre><code>〔動〕を記録する／〔名〕記録</code></pre>
@@ -90,19 +100,22 @@
 <p>説明のために作った例です。</p>
 <div class="table-wrap">
 <table>
-<thead><tr><th>番号</th><th>英単語</th><th>品詞</th><th>意味</th><th>類語</th><th>対義語</th><th>同じ語源の単語</th><th>類語（AI）</th><th>対義語（AI）</th><th>同じ語源の単語（AI）</th><th>要確認</th></tr></thead>
+<thead><tr><th>番号</th><th>英単語</th><th>品詞</th><th>意味</th><th>類語</th><th>対義語</th><th>同じ語源の単語</th><th>語句</th><th>備考</th><th>類語（AI）</th><th>対義語（AI）</th><th>同じ語源の単語（AI）</th><th>要確認</th></tr></thead>
 <tbody>
-<tr><td>1</td><td>record</td><td>動・名</td><td>〔動〕を記録する／〔名〕記録</td><td></td><td></td><td></td><td>register（を登録する）</td><td></td><td>recorder（記録係）</td><td></td></tr>
-<tr><td>2</td><td>brave</td><td>形</td><td>勇敢な</td><td></td><td>cowardly（臆病な）</td><td></td><td>courageous（勇気のある）</td><td></td><td></td><td></td></tr>
-<tr><td>3</td><td>example</td><td>名</td><td>例</td><td></td><td></td><td></td><td>instance（例） / sample（見本）</td><td></td><td>exemplify（を例示する）</td><td>意味の2つ目が不確か</td></tr>
+<tr><td>1</td><td>record</td><td>動・名</td><td>〔動〕を記録する／〔名〕記録</td><td></td><td></td><td></td><td>keep a record of X（X を記録しておく）</td><td class="cell-pre">〔解説〕keep a record of X（X を記録しておく）の形でよく使う。名詞は前に強く読む。
+〔ひとこと〕会議では、たいてい誰かが記録を取っている。</td><td>register（を登録する）</td><td></td><td>recorder（記録係）</td><td></td></tr>
+<tr><td>2</td><td>brave</td><td>形</td><td>勇敢な</td><td></td><td>cowardly（臆病な）</td><td></td><td></td><td></td><td>courageous（勇気のある）</td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td>example</td><td>名</td><td>例</td><td></td><td></td><td></td><td>for example（たとえば）</td><td></td><td>instance（例） / sample（見本）</td><td></td><td>exemplify（を例示する）</td><td>意味の2つ目が不確か</td></tr>
 </tbody>
 </table>
 </div>
 <p>これを CSV の文字で書くと、次のようになります。</p>
-<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認
-1,record,動・名,〔動〕を記録する／〔名〕記録,,,,register（を登録する）,,recorder（記録係）,
-2,brave,形,勇敢な,,cowardly（臆病な）,,courageous（勇気のある）,,,
-3,example,名,例,,,,instance（例） / sample（見本）,,exemplify（を例示する）,意味の2つ目が不確か</code></pre>
+<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,語句,備考,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認
+1,record,動・名,〔動〕を記録する／〔名〕記録,,,,keep a record of X（X を記録しておく）,"〔解説〕keep a record of X（X を記録しておく）の形でよく使う。名詞は前に強く読む。
+〔ひとこと〕会議では、たいてい誰かが記録を取っている。",register（を登録する）,,recorder（記録係）,
+2,brave,形,勇敢な,,cowardly（臆病な）,,,,courageous（勇気のある）,,,
+3,example,名,例,,,,for example（たとえば）,,instance（例） / sample（見本）,,exemplify（を例示する）,意味の2つ目が不確か</code></pre>
+<p>1行目の備考は、セルの中で改行した2行（〔解説〕の行と〔ひとこと〕の行）です。</p>
 <p>カンマ・ダブルクォート（<code>"</code>）・改行を含むセルは、<code>"</code> で囲み、中の <code>"</code> は <code>""</code> と2つ重ねます。表計算ソフトで保存すれば、自動でそうなります。</p>
 
 <h2 id="sakusei">5. 表計算ソフトでの作り方と保存</h2>
@@ -163,7 +176,7 @@
 <p>列名の行と、4章の例の3行が入った CSV です。例の行を消して、自分の単語を書いてください。</p>
 <button id="dl-template" class="btn btn-main" type="button" hidden>ひな形 CSV をダウンロードする</button>
 <p>ボタンが出ない・使えないときは、表計算ソフトの1行目に、次の列名を書き写してください。</p>
-<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認</code></pre>
+<pre><code>番号,英単語,品詞,意味,類語,対義語,同じ語源の単語,語句,備考,類語（AI）,対義語（AI）,同じ語源の単語（AI）,要確認</code></pre>
 
 <p class="doc-nav"><a href="../index.html">アプリに戻る</a><a href="./tsukaikata.html">使い方へ</a></p>
 </main>

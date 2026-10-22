@@ -123,7 +123,7 @@ export function rangeLabel(nos) {
 }
 
 // ---- 単語カード（2.4） ----
-// 番号・英単語・品詞・意味・類語・対義語・同じ語源の単語。
+// 番号・英単語・品詞・意味・類語・対義語・同じ語源の単語・語句・備考（語句・備考は覚える画面だけ。full）。
 // （AI）の列は同じ項目の後ろに「AI」の印をつけて出す。要確認のメモがあれば「要確認」の印とメモ。空の項目は出さない。
 // front: true のときは英単語だけ（テストの問題の表示。2.5）。
 const ROWS = [
@@ -135,7 +135,8 @@ const ROWS = [
 
 const text = (v) => (v === undefined || v === null ? "" : String(v));
 
-export function wordCard(w, { front = false } = {}) {
+// full: true のときだけ、語句・備考の行を出す（覚える画面だけ。2.4）。AI の印は付けない。
+export function wordCard(w, { front = false, full = false } = {}) {
   const card = el("article", front ? "card word-card word-front" : "card word-card");
   const head = el("div", "word-head");
   if (!front) head.append(el("span", "word-no", text(w.no)));
@@ -160,6 +161,19 @@ export function wordCard(w, { front = false } = {}) {
     }
     row.append(value);
     card.append(row);
+  }
+  if (full) {
+    for (const [key, label] of [["expr", "語句"], ["note", "備考"]]) {
+      const v = text(w[key]);
+      if (v === "") continue;
+      const row = el("div", "row row-" + key);
+      row.dataset.key = key;
+      row.append(el("span", "label", label));
+      const value = el("span", "value");
+      value.append(el("span", "book-text", v));
+      row.append(value);
+      card.append(row);
+    }
   }
   if (text(w.check) !== "") {
     const row = el("div", "row row-check");

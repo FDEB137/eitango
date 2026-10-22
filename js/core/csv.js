@@ -13,6 +13,8 @@ const COLUMNS = [
   ["類語", "syn"],
   ["対義語", "ant"],
   ["同じ語源の単語", "ety"],
+  ["語句", "expr"],
+  ["備考", "note"],
   ["類語（AI）", "synAi"],
   ["対義語（AI）", "antAi"],
   ["同じ語源の単語（AI）", "etyAi"],
@@ -116,7 +118,7 @@ function rangeText(r) {
 
 // アプリが取り込む CSV を読んで点検する。
 // 戻り値 {ok, errors: [{line, message}], warnings: [message], words, encoding, summary}
-//   words: [{no, word, pos, meaning, syn, ant, ety, synAi, antAi, etyAi, check}]（番号の昇順。エラーがあれば空）
+//   words: [{no, word, pos, meaning, syn, ant, ety, expr, note, synAi, antAi, etyAi, check}]（番号の昇順。エラーがあれば空）
 //   summary: {count, minNo, maxNo, gaps: [[from, to]], aiCount, checkCount}
 export function parseWordsCsv(input) {
   const errors = [];
@@ -182,7 +184,7 @@ export function parseWordsCsv(input) {
       fail(row.line, "列の数が列名の行と違います（" + row.cells.length + "列。列名の行は" + head.cells.length + "列）");
       continue;
     }
-    const w = { no: 0, word: "", pos: "", meaning: "", syn: "", ant: "", ety: "", synAi: "", antAi: "", etyAi: "", check: "" };
+    const w = { no: 0, word: "", pos: "", meaning: "", syn: "", ant: "", ety: "", expr: "", note: "", synAi: "", antAi: "", etyAi: "", check: "" };
     row.cells.forEach((v, i) => {
       const key = keyAt[i];
       if (key && key !== "no") w[key] = v.trim();

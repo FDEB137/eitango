@@ -67,7 +67,7 @@ export async function render(view, wordbookId) {
   if (step.type === "learn") {
     const top = el("div", "top-row");
     top.append(button("中断", () => ctx.go("#/"), "btn btn-sub btn-pause"), restart);
-    const main = [top, el("h1", "title", "覚える"), el("p", "note", where), wordCards(wordsByNos(step.nos, wordMap))];
+    const main = [top, el("h1", "title", "覚える"), el("p", "note", where), wordCards(wordsByNos(step.nos, wordMap), { full: true })];
     const next = guardedButton(
       ctx,
       "テストへ",

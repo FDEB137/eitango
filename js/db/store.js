@@ -136,7 +136,7 @@ const META_KEYS = ["schemaVersion", "activeWordbookId", "lastExportAt"];
 //   "migrationFailed" 移行に失敗（元のデータのまま）。読み込み・すべて消す・移行前のデータの書き出しだけできる。
 //   "newer"           DB の版がアプリより新しい（meta.schemaVersion が大きい、または open が VersionError）。何も書かない・出さない。
 //   "closed"          versionchange が届いて DB を閉じた。何もできない。
-// 状態が変わったら options.onStatusChange(status) を呼ぶ（画面に知らせる手段）。
+// 状態が変わったら options.onStatusChange(status) を呼ぶ（画面に伝える手段）。
 export async function openStore(options = {}) {
   const cfg = {
     dbName: DEFAULT_DB_NAME,
