@@ -106,9 +106,9 @@ export function shuffle(items, rng) {
   return a;
 }
 
-// テストを始める: 並びを決めて stepState を作る
-export function startTest(nos, rng) {
-  return { order: shuffle(nos, rng), answers: [], revealed: false };
+// テストを始める: 並びは nos の順（版7。ランダムにしない）で stepState を作る
+export function startTest(nos) {
+  return { order: [...nos], answers: [], revealed: false };
 }
 
 export function currentNo(state) {

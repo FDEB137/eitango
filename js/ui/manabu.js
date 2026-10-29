@@ -84,7 +84,7 @@ export async function render(view, wordbookId) {
   // ---- テスト（2.5） ----
   let st = block.stepState;
   if (!st) {
-    st = startTest(step.nos, ctx.rng); // 並びはここで決めて保存する（再開しても同じ）
+    st = startTest(step.nos); // 並び（番号の順）はここで決めて保存する（再開しても同じ）
     await store.saveStepState({ blockId: block.id, expectedStepIndex: i, stepState: st });
   }
   const title = stepName(step);

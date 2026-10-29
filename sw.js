@@ -1,6 +1,6 @@
 // Service Worker（docs/shiyou.md 11章）。classic script。
 // VERSION は js/version.js の APP_VERSION と同じ値にする（app/ を変えたら両方上げる）。
-const VERSION = "1.1.2";
+const VERSION = "1.2.0";
 const CACHE_PREFIX = "eitango-";
 const CACHE_NAME = CACHE_PREFIX + VERSION;
 
